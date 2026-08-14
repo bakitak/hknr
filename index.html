@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Nitra - Kalendár a rozpis zápasov</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003366;
+            --primary-dark: #002244;
+            --primary-light: #1a4d80;
+            --accent: #d4af37;
+            --accent-hover: #b89628;
+            --bg-light: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --home-color: #2563eb;
+            --away-color: #7c3aed;
+            --chl-color: #0284c7;
+            --prep-color: #059669;
+            --tipsport-color: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 30px 20px;
+            box-shadow: 0 4px 15px rgba(0, 51, 102, 0.3);
+            position: relative;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .header-container {
+                flex-direction: row;
+                text-align: left;
+                justify-content: space-between;
+            }
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 576px) {
+            .brand-section {
+                flex-direction: row;
+            }
+        }
+
+        .logo {
+            max-height: 90px;
+            width: auto;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .title-group h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .title-group p {
+            font-size: 1rem;
+            color: #cbd5e1;
+            margin-top: 4px;
+        }
+
+        /* Import Buttons in Header */
+        .calendar-import-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-apple {
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-apple:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-2px);
+        }
+
+        .btn-google {
+            background-color: #4285F4;
+            color: white;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        }
+
+        .btn-google:hover {
+            background-color: #3367d6;
+            transform: translateY(-2px);
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 18px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-card .val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-card .lbl {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Filters & Search */
+        .controls-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .input-search, .select-filter {
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-search {
+            min-width: 200px;
+            flex: 1;
+        }
+
+        .input-search:focus, .select-filter:focus {
+            border-color: var(--primary);
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--bg-light);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 6px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Matches Table / Cards */
+        .matches-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .matches-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .matches-table th {
+            background-color: #f8fafc;
+            padding: 14px 18px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .matches-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        .matches-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .matches-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-home {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-away {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .badge-tipsport {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-chl {
+            background-color: #e0f2fe;
+            color: #075985;
+        }
+
+        .badge-prep {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .team-match {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+        }
+
+        .highlight-nitra {
+            color: var(--primary);
+        }
+
+        .match-date {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .match-time {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Individual Action Buttons */
+        .action-btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .action-btn-sm:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 170px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            z-index: 10;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: var(--text-main);
+            padding: 10px 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Cards Grid View */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .match-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .match-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .match-card-body {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .match-card-teams {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .match-card-datetime {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .match-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+		
+		.match-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+		
+		footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Modal Guide */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .instruction-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .matches-table th:nth-child(4),
+            .matches-table td:nth-child(4) {
+                display: none;
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="brand-section">
+                <img src="https://hknitra.sk/wp-content/uploads/2024/09/HK-NITRA-logo-2024-strednevelke.png" alt="HK Nitra Logo" class="logo">
+                <div class="title-group">
+                    <h1>HK Nitra</h1>
+                    <p>Kalendár a rozpis hokejových zápasov 2025 – 2027</p>
+                </div>
+            </div>
+            <div class="calendar-import-actions">
+                <button onclick="downloadFullICS()" class="btn btn-apple">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.61-.74 1.03-1.77.91-2.82-.89.04-1.97.6-2.61 1.35-.57.66-1.07 1.72-.94 2.75 1 .08 2.02-.54 2.64-1.28z"/></svg>
+                    Apple / iCal Kalendár (.ics)
+                </button>
+                <button onclick="openGoogleModal()" class="btn btn-google">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+                    Google Kalendár
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>
+                    <div class="lbl">Celkový počet zápasov</div>
+                    <div class="val" id="stat-total">63</div>
+                </div>
+                <svg width="32" height="32" fill="none" stroke="var(--primary)" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <div class="lbl">Domáce zápasy (Nitra)</div>
+                    <div class="val" id="stat-home">0</div>
+                </div>
+                <svg width="32" height="32" fill="none" stroke="var(--home-color)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <div class="lbl">Zápasy vonku</div>
+                    <div class="val" id="stat-away">0</div>
+                </div>
+                <svg width="32" height="32" fill="none" stroke="var(--away-color)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <div class="lbl">Súťaže</div>
+                    <div class="val" style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">Tipsport, CHL, Príprava</div>
+                </div>
+                <svg width="32" height="32" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+            </div>
+        </div>
+
+        <!-- Controls / Filters -->
+        <div class="controls-card">
+            <div class="filter-group">
+                <input type="text" id="searchInput" class="input-search" placeholder="Hľadať súpera alebo miesto..." oninput="filterMatches()">
+                
+                <select id="compFilter" class="select-filter" onchange="filterMatches()">
+                    <option value="ALL">Všetky súťaže</option>
+                    <option value="Tipsport liga">Tipsport liga</option>
+                    <option value="Liga majstrov (CHL)">Liga majstrov (CHL)</option>
+                    <option value="Príprava">Príprava</option>
+                </select>
+
+                <select id="venueFilter" class="select-filter" onchange="filterMatches()">
+                    <option value="ALL">Domáce aj Vonku</option>
+                    <option value="HOME">Iba domáce (D)</option>
+                    <option value="AWAY">Iba vonku (V)</option>
+                </select>
+
+                <select id="monthFilter" class="select-filter" onchange="filterMatches()">
+                    <option value="ALL">Všetky mesiace</option>
+                </select>
+            </div>
+
+            <div class="view-toggle">
+                <button class="view-btn active" id="btnViewTable" onclick="setView('table')">Tabuľka</button>
+                <button class="view-btn" id="btnViewGrid" onclick="setView('grid')">Karty</button>
+            </div>
+        </div>
+
+        <!-- Matches Display Area -->
+        <div class="matches-container" id="matchesContainer">
+            <!-- Rendered by JavaScript -->
+        </div>
+
+    </div>
+    <footer>
+        <p>&copy; 2026 BAKITAK - VYGENEROVANÉ POMOCOU AI GEMINI | fanúšikovský rozpis zápasov.</p>
+    </footer>
+	
+    <!-- Modal for Google Calendar Instructions -->
+    <div class="modal" id="googleModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeGoogleModal()">&times;</span>
+            <div class="modal-title">Import do Google Kalendára</div>
+            <p style="margin-bottom: 15px;">Google Kalendár umožňuje jednoduchý import celého rozpisu zápasov pomocou súboru kalendára (.ics):</p>
+            <ol class="instruction-list">
+                <li>Kliknite na tlačidlo <strong>"Stiahnuť .ics kalendár"</strong> nižšie pre stiahnutie kompletného súboru.</li>
+                <li>Otvorte svoj <a href="https://calendar.google.com" target="_blank" style="color: var(--primary); font-weight: 600;">Google Kalendár</a> v prehliadači.</li>
+                <li>Vpravo hore kliknite na <strong>Ozubené koliesko (Nastavenia)</strong> &rarr; <strong>Nastavenia</strong>.</li>
+                <li>V ľavom menu zvoľte <strong>Importovať a exportovať</strong>.</li>
+                <li>Vyberte stiahnutý súbor <code>HKNitra_zapasov_kalendar.ics</code> a zvoľte kalendár, do ktorého sa majú zápasy pridať.</li>
+                <li>Kliknite na <strong>Importovať</strong>. Zápasy sa okamžite zobrazia vo vašom Google kalendári!</li>
+            </ol>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button onclick="downloadFullICS(); closeGoogleModal();" class="btn btn-google">
+                    Stiahnuť .ics kalendár
+                </button>
+                <button onclick="closeGoogleModal()" class="btn" style="background: #e2e8f0; color: #334155;">
+                    Zatvoriť
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        const matchesData = [{"id": 1, "competition": "Príprava", "date": "2025-08-21", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - FTE Budapešť", "isHome": true}, {"id": 2, "competition": "Príprava", "date": "2025-08-25", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Berani Zlín", "isHome": true}, {"id": 3, "competition": "Príprava", "date": "2025-08-27", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - GKS Tychy", "isHome": true}, {"id": 4, "competition": "Liga majstrov (CHL)", "date": "2026-09-04", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Skellefteå AIK", "isHome": true}, {"id": 5, "competition": "Liga majstrov (CHL)", "date": "2026-09-06", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Växjö Lakers", "isHome": true}, {"id": 6, "competition": "Liga majstrov (CHL)", "date": "2026-09-10", "startTime": "17:30:00", "endTime": "20:00:00", "match": "KooKoo Kouvola - HK Nitra", "isHome": false}, {"id": 7, "competition": "Liga majstrov (CHL)", "date": "2026-09-12", "startTime": "16:00:00", "endTime": "18:30:00", "match": "SaiPa Lappeenranta - HK Nitra", "isHome": false}, {"id": 8, "competition": "Liga majstrov (CHL)", "date": "2026-10-06", "startTime": "19:45:00", "endTime": "22:15:00", "match": "Fribourg-Gottéron - HK Nitra", "isHome": false}, {"id": 9, "competition": "Liga majstrov (CHL)", "date": "2026-10-13", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Rögle Ängelholm", "isHome": true}, {"id": 10, "competition": "Tipsport liga", "date": "2026-09-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Slovan Bratislava", "isHome": true}, {"id": 11, "competition": "Tipsport liga", "date": "2026-09-18", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Košice", "isHome": true}, {"id": 12, "competition": "Tipsport liga", "date": "2026-09-20", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Poprad - HK Nitra", "isHome": false}, {"id": 13, "competition": "Tipsport liga", "date": "2026-09-25", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Vlci Žilina", "isHome": true}, {"id": 14, "competition": "Tipsport liga", "date": "2026-09-27", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC MONACObet Banská Bystrica - HK Nitra", "isHome": false}, {"id": 15, "competition": "Tipsport liga", "date": "2026-09-29", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 16, "competition": "Tipsport liga", "date": "2026-10-02", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Michalovce - HK Nitra", "isHome": false}, {"id": 17, "competition": "Tipsport liga", "date": "2026-10-04", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HKM Zvolen", "isHome": true}, {"id": 18, "competition": "Tipsport liga", "date": "2026-10-09", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Trenčín - HK Nitra", "isHome": false}, {"id": 19, "competition": "Tipsport liga", "date": "2026-10-11", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Spišská Nová Ves", "isHome": true}, {"id": 20, "competition": "Tipsport liga", "date": "2026-10-16", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Prešov - HK Nitra", "isHome": false}, {"id": 21, "competition": "Tipsport liga", "date": "2026-10-18", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 22, "competition": "Tipsport liga", "date": "2026-10-23", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Košice - HK Nitra", "isHome": false}, {"id": 23, "competition": "Tipsport liga", "date": "2026-10-25", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Poprad", "isHome": true}, {"id": 24, "competition": "Tipsport liga", "date": "2026-10-30", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 25, "competition": "Tipsport liga", "date": "2026-11-01", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 26, "competition": "Tipsport liga", "date": "2026-11-11", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 27, "competition": "Tipsport liga", "date": "2026-11-13", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 28, "competition": "Tipsport liga", "date": "2026-11-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 29, "competition": "Tipsport liga", "date": "2026-11-20", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 30, "competition": "Tipsport liga", "date": "2026-11-22", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Spišská Nová Ves - HK Nitra", "isHome": false}, {"id": 31, "competition": "Tipsport liga", "date": "2026-11-24", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Prešov", "isHome": true}, {"id": 32, "competition": "Tipsport liga", "date": "2026-11-27", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 33, "competition": "Tipsport liga", "date": "2026-11-29", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Košice - HK Nitra", "isHome": false}, {"id": 34, "competition": "Tipsport liga", "date": "2026-12-04", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Poprad", "isHome": true}, {"id": 35, "competition": "Tipsport liga", "date": "2026-12-06", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 36, "competition": "Tipsport liga", "date": "2026-12-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 37, "competition": "Tipsport liga", "date": "2026-12-18", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 38, "competition": "Tipsport liga", "date": "2026-12-20", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 39, "competition": "Tipsport liga", "date": "2026-12-22", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 40, "competition": "Tipsport liga", "date": "2026-12-26", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 41, "competition": "Tipsport liga", "date": "2026-12-28", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 42, "competition": "Tipsport liga", "date": "2026-12-30", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 43, "competition": "Tipsport liga", "date": "2027-01-03", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 44, "competition": "Tipsport liga", "date": "2027-01-05", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 45, "competition": "Tipsport liga", "date": "2027-01-08", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 46, "competition": "Tipsport liga", "date": "2027-01-10", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 47, "competition": "Tipsport liga", "date": "2027-01-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 48, "competition": "Tipsport liga", "date": "2027-01-17", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 49, "competition": "Tipsport liga", "date": "2027-01-22", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 50, "competition": "Tipsport liga", "date": "2027-01-24", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 51, "competition": "Tipsport liga", "date": "2027-01-29", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Spišská Nová Ves - HK Nitra", "isHome": false}, {"id": 52, "competition": "Tipsport liga", "date": "2027-01-30", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Prešov", "isHome": true}, {"id": 53, "competition": "Tipsport liga", "date": "2027-02-02", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Slovan Bratislava", "isHome": true}, {"id": 54, "competition": "Tipsport liga", "date": "2027-02-05", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Košice", "isHome": true}, {"id": 55, "competition": "Tipsport liga", "date": "2027-02-07", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Poprad - HK Nitra", "isHome": false}, {"id": 56, "competition": "Tipsport liga", "date": "2027-02-14", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Vlci Žilina", "isHome": true}, {"id": 57, "competition": "Tipsport liga", "date": "2027-02-19", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC MONACObet Banská Bystrica - HK Nitra", "isHome": false}, {"id": 58, "competition": "Tipsport liga", "date": "2027-02-21", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 59, "competition": "Tipsport liga", "date": "2027-02-26", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Michalovce - HK Nitra", "isHome": false}, {"id": 60, "competition": "Tipsport liga", "date": "2027-02-28", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HKM Zvolen", "isHome": true}, {"id": 61, "competition": "Tipsport liga", "date": "2027-03-02", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Trenčín - HK Nitra", "isHome": false}, {"id": 62, "competition": "Tipsport liga", "date": "2027-03-05", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Spišská Nová Ves", "isHome": true}, {"id": 63, "competition": "Tipsport liga", "date": "2027-03-07", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Prešov - HK Nitra", "isHome": false}];
+
+        let currentView = 'table';
+
+        // Slovak month names
+        const monthNamesSk = [
+            "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
+            "Júl", "August", "September", "Október", "November", "December"
+        ];
+
+        const dayNamesSk = [
+            "Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"
+        ];
+
+        // Format Date to Slovak representation
+        function formatDateSk(dateStr) {
+            const d = new Date(dateStr + 'T00:00:00');
+            const dayName = dayNamesSk[d.getDay()];
+            const day = d.getDate();
+            const month = monthNamesSk[d.getMonth()];
+            const year = d.getFullYear();
+            return `${dayName}, ${day}. ${month} ${year}`;
+        }
+
+        // Initialize Page
+        window.addEventListener('DOMContentLoaded', () => {
+            populateMonthFilter();
+            updateStats();
+            renderMatches();
+        });
+
+        function populateMonthFilter() {
+            const monthSelect = document.getElementById('monthFilter');
+            const monthsSet = new Set();
+            
+            matchesData.forEach(m => {
+                const d = new Date(m.date + 'T00:00:00');
+                const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                const label = `${monthNamesSk[d.getMonth()]} ${d.getFullYear()}`;
+                monthsSet.add(JSON.stringify({ key, label }));
+            });
+
+            const months = Array.from(monthsSet).map(s => JSON.parse(s));
+            months.sort((a, b) => a.key.localeCompare(b.key));
+
+            months.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.key;
+                opt.textContent = m.label;
+                monthSelect.appendChild(opt);
+            });
+        }
+
+        function updateStats() {
+            const homeCount = matchesData.filter(m => m.isHome).length;
+            const awayCount = matchesData.length - homeCount;
+            document.getElementById('stat-total').textContent = matchesData.length;
+            document.getElementById('stat-home').textContent = homeCount;
+            document.getElementById('stat-away').textContent = awayCount;
+        }
+
+        function filterMatches() {
+            renderMatches();
+        }
+
+        function getFilteredMatches() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+            const compVal = document.getElementById('compFilter').value;
+            const venueVal = document.getElementById('venueFilter').value;
+            const monthVal = document.getElementById('monthFilter').value;
+
+            return matchesData.filter(m => {
+                // Search filter
+                const matchName = m.match.toLowerCase();
+                const compName = m.competition.toLowerCase();
+                if (searchVal && !matchName.includes(searchVal) && !compName.includes(searchVal)) {
+                    return false;
+                }
+
+                // Competition filter
+                if (compVal !== 'ALL' && m.competition !== compVal) {
+                    return false;
+                }
+
+                // Venue filter
+                if (venueVal === 'HOME' && !m.isHome) return false;
+                if (venueVal === 'AWAY' && m.isHome) return false;
+
+                // Month filter
+                if (monthVal !== 'ALL') {
+                    const d = new Date(m.date + 'T00:00:00');
+                    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                    if (key !== monthVal) return false;
+                }
+
+                return true;
+            });
+        }
+
+        function setView(view) {
+            currentView = view;
+            document.getElementById('btnViewTable').classList.toggle('active', view === 'table');
+            document.getElementById('btnViewGrid').classList.toggle('active', view === 'grid');
+            renderMatches();
+        }
+
+        function renderMatches() {
+            const filtered = getFilteredMatches();
+            const container = document.getElementById('matchesContainer');
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="no-results">Nenašli sa žiadne zápasy zodpovedajúce zadaným kritériám.</div>`;
+                return;
+            }
+
+            if (currentView === 'table') {
+                let html = `
+                    <table class="matches-table">
+                        <thead>
+                            <tr>
+                                <th>Dátum & Čas</th>
+                                <th>Súťaž</th>
+                                <th>Zápas</th>
+                                <th>Miesto</th>
+                                <th style="text-align: right;">Pridať do kalendára</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                filtered.forEach(m => {
+                    const dateFormatted = formatDateSk(m.date);
+                    const timeFormatted = m.startTime.substring(0, 5) + ' - ' + m.endTime.substring(0, 5);
+                    
+                    let compBadgeClass = 'badge-tipsport';
+                    if (m.competition.includes('CHL')) compBadgeClass = 'badge-chl';
+                    else if (m.competition.includes('Príprava')) compBadgeClass = 'badge-prep';
+
+                    const venueBadge = m.isHome 
+                        ? `<span class="badge badge-home">Domáci (D)</span>`
+                        : `<span class="badge badge-away">Vonku (V)</span>`;
+
+                    const googleUrl = getGoogleCalendarUrl(m);
+
+                    html += `
+                        <tr>
+                            <td>
+                                <div class="match-date">${dateFormatted}</div>
+                                <div class="match-time">⏰ ${timeFormatted}</div>
+                            </td>
+                            <td>
+                                <span class="badge ${compBadgeClass}">${m.competition}</span>
+                            </td>
+                            <td>
+                                <div class="team-match">${formatMatchTeams(m.match)}</div>
+                            </td>
+                            <td>${venueBadge}</td>
+                            <td style="text-align: right;">
+                                <div class="dropdown">
+                                    <button class="action-btn-sm">
+                                        📅 Pridať &#9662;
+                                    </button>
+                                    <div class="dropdown-content">
+                                        <a href="${googleUrl}" target="_blank">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#4285F4"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+                                            Google Kalendár
+                                        </a>
+                                        <a href="#" onclick="downloadSingleICS(${m.id}); return false;">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.61-.74 1.03-1.77.91-2.82-.89.04-1.97.6-2.61 1.35-.57.66-1.07 1.72-.94 2.75 1 .08 2.02-.54 2.64-1.28z"/></svg>
+                                            Apple / iCal (.ics)
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            } else {
+                // Grid View
+                let html = `<div class="matches-grid">`;
+                filtered.forEach(m => {
+                    const dateFormatted = formatDateSk(m.date);
+                    const timeFormatted = m.startTime.substring(0, 5) + ' - ' + m.endTime.substring(0, 5);
+
+                    let compBadgeClass = 'badge-tipsport';
+                    if (m.competition.includes('CHL')) compBadgeClass = 'badge-chl';
+                    else if (m.competition.includes('Príprava')) compBadgeClass = 'badge-prep';
+
+                    const venueBadge = m.isHome 
+                        ? `<span class="badge badge-home">Domáci</span>`
+                        : `<span class="badge badge-away">Vonku</span>`;
+
+                    const googleUrl = getGoogleCalendarUrl(m);
+
+                    html += `
+                        <div class="match-card">
+                            <div class="match-card-header">
+                                <span class="badge ${compBadgeClass}">${m.competition}</span>
+                                ${venueBadge}
+                            </div>
+                            <div class="match-card-body">
+                                <div class="match-card-teams">${formatMatchTeams(m.match)}</div>
+                                <div class="match-card-datetime">📅 ${dateFormatted}</div>
+                                <div class="match-card-datetime" style="margin-top: 4px;">⏰ ${timeFormatted}</div>
+                            </div>
+                            <div class="match-card-footer">
+                                <a href="${googleUrl}" target="_blank" class="action-btn-sm" style="flex: 1; justify-content: center;">
+                                    Google
+                                </a>
+                                <button onclick="downloadSingleICS(${m.id})" class="action-btn-sm" style="flex: 1; justify-content: center;">
+                                    iCal / Apple
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                container.innerHTML = html;
+            }
+        }
+
+        function formatMatchTeams(matchStr) {
+            return matchStr.replace('HK Nitra', '<span class="highlight-nitra">HK Nitra</span>');
+        }
+
+        // Generate Google Calendar Link for single match
+        function getGoogleCalendarUrl(m) {
+            const startDt = m.date.replace(/-/g, '') + 'T' + m.startTime.replace(/:/g, '');
+            const endDt = m.date.replace(/-/g, '') + 'T' + m.endTime.replace(/:/g, '');
+            const title = encodeURIComponent(`Hokej: ${m.match} (${m.competition})`);
+            const details = encodeURIComponent(`Hokejový zápas ${m.match}\nSúťaž: ${m.competition}\nOficiálny rozpis HK Nitra.`);
+            const location = encodeURIComponent(m.isHome ? 'Zimný štadión Nitra, Nitra, Slovensko' : 'Štadión súpera');
+
+            return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDt}/${endDt}&details=${details}&location=${location}`;
+        }
+
+        // Generate ICS String for a list of matches
+        function generateICSContent(matches) {
+            let ics = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//HK Nitra//Rozpis Zapasov//SK',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH',
+                'X-WR-CALNAME:HK Nitra - Rozpis Zapasov',
+                'X-WR-TIMEZONE:Europe/Bratislava'
+            ];
+
+            matches.forEach(m => {
+                const startDt = m.date.replace(/-/g, '') + 'T' + m.startTime.replace(/:/g, '');
+                const endDt = m.date.replace(/-/g, '') + 'T' + m.endTime.replace(/:/g, '');
+                const location = m.isHome ? 'Zimný štadión Nitra, Nitra, Slovensko' : 'Štadión súpera';
+
+                ics.push('BEGIN:VEVENT');
+                ics.push(`UID:match-${m.id}-2026@hknitra.sk`);
+                ics.push(`DTSTAMP:${startDt}Z`);
+                ics.push(`DTSTART:${startDt}`);
+                ics.push(`DTEND:${endDt}`);
+                ics.push(`SUMMARY:Hokej: ${m.match} (${m.competition})`);
+                ics.push(`DESCRIPTION:Hokejový zápas ${m.match}\nSúťaž: ${m.competition}`);
+                ics.push(`LOCATION:${location}`);
+                ics.push('STATUS:CONFIRMED');
+                ics.push('END:VEVENT');
+            });
+
+            ics.push('END:VCALENDAR');
+            return ics.join('\r\n');
+        }
+
+        function triggerDownload(filename, content) {
+            const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadFullICS() {
+            const icsData = generateICSContent(matchesData);
+            triggerDownload('HKNitra_zapasov_kalendar.ics', icsData);
+        }
+
+        function downloadSingleICS(id) {
+            const match = matchesData.find(m => m.id === id);
+            if (match) {
+                const icsData = generateICSContent([match]);
+                triggerDownload(`HKNitra_zapas_${match.date}.ics`, icsData);
+            }
+        }
+
+        function openGoogleModal() {
+            document.getElementById('googleModal').style.display = 'flex';
+        }
+
+        function closeGoogleModal() {
+            document.getElementById('googleModal').style.display = 'none';
+        }
+
+        // Close modal on background click
+        window.onclick = function(event) {
+            const modal = document.getElementById('googleModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
