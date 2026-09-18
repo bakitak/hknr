@@ -22,7 +22,6 @@
             --home-color: #2563eb;
             --away-color: #7c3aed;
             --chl-color: #0284c7;
-            --prep-color: #059669;
             --tipsport-color: #d97706;
         }
 
@@ -325,11 +324,6 @@
             color: #075985;
         }
 
-        .badge-prep {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
         .team-match {
             font-weight: 700;
             font-size: 1.05rem;
@@ -466,15 +460,6 @@
             border-top: 1px solid var(--border-color);
             padding-top: 12px;
         }
-		
-		.match-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border);
-        }
-		
 		footer {
             text-align: center;
             margin-top: 50px;
@@ -579,8 +564,8 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div>
-                    <div class="lbl">Celkový počet zápasov</div>
-                    <div class="val" id="stat-total">63</div>
+                    <div class="lbl">Nadchádzajúce zápasy</div>
+                    <div class="val" id="stat-total">55</div>
                 </div>
                 <svg width="32" height="32" fill="none" stroke="var(--primary)" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             </div>
@@ -601,7 +586,7 @@
             <div class="stat-card">
                 <div>
                     <div class="lbl">Súťaže</div>
-                    <div class="val" style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">Tipsport, CHL, Príprava</div>
+                    <div class="val" style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">Tipos Extraliga, CHL</div>
                 </div>
                 <svg width="32" height="32" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
             </div>
@@ -610,13 +595,12 @@
         <!-- Controls / Filters -->
         <div class="controls-card">
             <div class="filter-group">
-                <input type="text" id="searchInput" class="input-search" placeholder="Hľadať súpera alebo miesto..." oninput="filterMatches()">
+                <input type="text" id="searchInput" class="input-search" placeholder="Hľadať súpera, kolo alebo miesto..." oninput="filterMatches()">
                 
                 <select id="compFilter" class="select-filter" onchange="filterMatches()">
                     <option value="ALL">Všetky súťaže</option>
-                    <option value="Tipsport liga">Tipsport liga</option>
-                    <option value="Liga majstrov (CHL)">Liga majstrov (CHL)</option>
-                    <option value="Príprava">Príprava</option>
+                    <option value="EXTRALIGA">Tipos Extraliga (kolá)</option>
+                    <option value="CHL">Liga majstrov (CHL)</option>
                 </select>
 
                 <select id="venueFilter" class="select-filter" onchange="filterMatches()">
@@ -642,10 +626,10 @@
         </div>
 
     </div>
-    <footer>
+	<footer>
         <p>&copy; 2026 BAKITAK - VYGENEROVANÉ POMOCOU AI GEMINI | fanúšikovský rozpis zápasov.</p>
     </footer>
-	
+
     <!-- Modal for Google Calendar Instructions -->
     <div class="modal" id="googleModal">
         <div class="modal-content">
@@ -673,7 +657,7 @@
 
     <!-- JavaScript Data & Logic -->
     <script>
-        const matchesData = [{"id": 1, "competition": "Príprava", "date": "2026-08-21", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - FTE Budapešť", "isHome": true}, {"id": 2, "competition": "Príprava", "date": "2026-08-25", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Berani Zlín", "isHome": true}, {"id": 3, "competition": "Príprava", "date": "2026-08-27", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - GKS Tychy", "isHome": true}, {"id": 4, "competition": "Liga majstrov (CHL)", "date": "2026-09-04", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Skellefteå AIK", "isHome": true}, {"id": 5, "competition": "Liga majstrov (CHL)", "date": "2026-09-06", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Växjö Lakers", "isHome": true}, {"id": 6, "competition": "Liga majstrov (CHL)", "date": "2026-09-10", "startTime": "17:30:00", "endTime": "20:00:00", "match": "KooKoo Kouvola - HK Nitra", "isHome": false}, {"id": 7, "competition": "Liga majstrov (CHL)", "date": "2026-09-12", "startTime": "16:00:00", "endTime": "18:30:00", "match": "SaiPa Lappeenranta - HK Nitra", "isHome": false}, {"id": 8, "competition": "Liga majstrov (CHL)", "date": "2026-10-06", "startTime": "19:45:00", "endTime": "22:15:00", "match": "Fribourg-Gottéron - HK Nitra", "isHome": false}, {"id": 9, "competition": "Liga majstrov (CHL)", "date": "2026-10-13", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Rögle Ängelholm", "isHome": true}, {"id": 10, "competition": "Tipsport liga", "date": "2026-09-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Slovan Bratislava", "isHome": true}, {"id": 11, "competition": "Tipsport liga", "date": "2026-09-18", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Košice", "isHome": true}, {"id": 12, "competition": "Tipsport liga", "date": "2026-09-20", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Poprad - HK Nitra", "isHome": false}, {"id": 13, "competition": "Tipsport liga", "date": "2026-09-25", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Vlci Žilina", "isHome": true}, {"id": 14, "competition": "Tipsport liga", "date": "2026-09-27", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC MONACObet Banská Bystrica - HK Nitra", "isHome": false}, {"id": 15, "competition": "Tipsport liga", "date": "2026-09-29", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 16, "competition": "Tipsport liga", "date": "2026-10-02", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Michalovce - HK Nitra", "isHome": false}, {"id": 17, "competition": "Tipsport liga", "date": "2026-10-04", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HKM Zvolen", "isHome": true}, {"id": 18, "competition": "Tipsport liga", "date": "2026-10-09", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Trenčín - HK Nitra", "isHome": false}, {"id": 19, "competition": "Tipsport liga", "date": "2026-10-11", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Spišská Nová Ves", "isHome": true}, {"id": 20, "competition": "Tipsport liga", "date": "2026-10-16", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Prešov - HK Nitra", "isHome": false}, {"id": 21, "competition": "Tipsport liga", "date": "2026-10-18", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 22, "competition": "Tipsport liga", "date": "2026-10-23", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Košice - HK Nitra", "isHome": false}, {"id": 23, "competition": "Tipsport liga", "date": "2026-10-25", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Poprad", "isHome": true}, {"id": 24, "competition": "Tipsport liga", "date": "2026-10-30", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 25, "competition": "Tipsport liga", "date": "2026-11-01", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 26, "competition": "Tipsport liga", "date": "2026-11-11", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 27, "competition": "Tipsport liga", "date": "2026-11-13", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 28, "competition": "Tipsport liga", "date": "2026-11-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 29, "competition": "Tipsport liga", "date": "2026-11-20", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 30, "competition": "Tipsport liga", "date": "2026-11-22", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Spišská Nová Ves - HK Nitra", "isHome": false}, {"id": 31, "competition": "Tipsport liga", "date": "2026-11-24", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Prešov", "isHome": true}, {"id": 32, "competition": "Tipsport liga", "date": "2026-11-27", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 33, "competition": "Tipsport liga", "date": "2026-11-29", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Košice - HK Nitra", "isHome": false}, {"id": 34, "competition": "Tipsport liga", "date": "2026-12-04", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Poprad", "isHome": true}, {"id": 35, "competition": "Tipsport liga", "date": "2026-12-06", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 36, "competition": "Tipsport liga", "date": "2026-12-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 37, "competition": "Tipsport liga", "date": "2026-12-18", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 38, "competition": "Tipsport liga", "date": "2026-12-20", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 39, "competition": "Tipsport liga", "date": "2026-12-22", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 40, "competition": "Tipsport liga", "date": "2026-12-26", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 41, "competition": "Tipsport liga", "date": "2026-12-28", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 42, "competition": "Tipsport liga", "date": "2026-12-30", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 43, "competition": "Tipsport liga", "date": "2027-01-03", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 44, "competition": "Tipsport liga", "date": "2027-01-05", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 45, "competition": "Tipsport liga", "date": "2027-01-08", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 46, "competition": "Tipsport liga", "date": "2027-01-10", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 47, "competition": "Tipsport liga", "date": "2027-01-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 48, "competition": "Tipsport liga", "date": "2027-01-17", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 49, "competition": "Tipsport liga", "date": "2027-01-22", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 50, "competition": "Tipsport liga", "date": "2027-01-24", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 51, "competition": "Tipsport liga", "date": "2027-01-29", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Spišská Nová Ves - HK Nitra", "isHome": false}, {"id": 52, "competition": "Tipsport liga", "date": "2027-01-30", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Prešov", "isHome": true}, {"id": 53, "competition": "Tipsport liga", "date": "2027-02-02", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Slovan Bratislava", "isHome": true}, {"id": 54, "competition": "Tipsport liga", "date": "2027-02-05", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HC Košice", "isHome": true}, {"id": 55, "competition": "Tipsport liga", "date": "2027-02-07", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Poprad - HK Nitra", "isHome": false}, {"id": 56, "competition": "Tipsport liga", "date": "2027-02-14", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - Vlci Žilina", "isHome": true}, {"id": 57, "competition": "Tipsport liga", "date": "2027-02-19", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC MONACObet Banská Bystrica - HK Nitra", "isHome": false}, {"id": 58, "competition": "Tipsport liga", "date": "2027-02-21", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 59, "competition": "Tipsport liga", "date": "2027-02-26", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Michalovce - HK Nitra", "isHome": false}, {"id": 60, "competition": "Tipsport liga", "date": "2027-02-28", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HKM Zvolen", "isHome": true}, {"id": 61, "competition": "Tipsport liga", "date": "2027-03-02", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Dukla Trenčín - HK Nitra", "isHome": false}, {"id": 62, "competition": "Tipsport liga", "date": "2027-03-05", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Spišská Nová Ves", "isHome": true}, {"id": 63, "competition": "Tipsport liga", "date": "2027-03-07", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HC Prešov - HK Nitra", "isHome": false}];
+        const matchesData = [{"id": 1, "competition": "2. kolo", "date": "2026-09-18", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HC Košice", "isHome": true}, {"id": 2, "competition": "3. kolo", "date": "2026-09-20", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Poprad - HK Nitra", "isHome": false}, {"id": 3, "competition": "4. kolo", "date": "2026-09-25", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Vlci Žilina", "isHome": true}, {"id": 4, "competition": "5. kolo", "date": "2026-09-27", "startTime": "16:30:00", "endTime": "19:00:00", "match": "HC MONACObet Banská Bystrica - HK Nitra", "isHome": false}, {"id": 5, "competition": "6. kolo", "date": "2026-09-29", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 6, "competition": "7. kolo", "date": "2026-10-02", "startTime": "17:30:00", "endTime": "20:00:00", "match": "HK Dukla Michalovce - HK Nitra", "isHome": false}, {"id": 7, "competition": "8. kolo", "date": "2026-10-04", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Nitra - HKM Zvolen", "isHome": true}, {"id": 8, "competition": "Liga majstrov (CHL)", "date": "2026-10-06", "startTime": "19:45:00", "endTime": "22:15:00", "match": "Fribourg-Gottéron - HK Nitra", "isHome": false}, {"id": 9, "competition": "9. kolo", "date": "2026-10-09", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Dukla Trenčín - HK Nitra", "isHome": false}, {"id": 10, "competition": "10. kolo", "date": "2026-10-11", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Nitra - HK Spišská Nová Ves", "isHome": true}, {"id": 11, "competition": "Liga majstrov (CHL)", "date": "2026-10-13", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Rögle Ängelholm", "isHome": true}, {"id": 12, "competition": "11. kolo", "date": "2026-10-16", "startTime": "18:30:00", "endTime": "21:00:00", "match": "HC Prešov - HK Nitra", "isHome": false}, {"id": 13, "competition": "12. kolo", "date": "2026-10-18", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 14, "competition": "13. kolo", "date": "2026-10-23", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HC Košice - HK Nitra", "isHome": false}, {"id": 15, "competition": "14. kolo", "date": "2026-10-25", "startTime": "19:00:00", "endTime": "21:30:00", "match": "HK Nitra - HK Poprad", "isHome": true}, {"id": 16, "competition": "15. kolo", "date": "2026-10-30", "startTime": "17:30:00", "endTime": "20:00:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 17, "competition": "16. kolo", "date": "2026-11-01", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 18, "competition": "17. kolo", "date": "2026-11-11", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 19, "competition": "18. kolo", "date": "2026-11-13", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 20, "competition": "19. kolo", "date": "2026-11-15", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 21, "competition": "20. kolo", "date": "2026-11-20", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 22, "competition": "21. kolo", "date": "2026-11-22", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Spišská Nová Ves - HK Nitra", "isHome": false}, {"id": 23, "competition": "22. kolo", "date": "2026-11-24", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HC Prešov", "isHome": true}, {"id": 24, "competition": "23. kolo", "date": "2026-11-27", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 25, "competition": "24. kolo", "date": "2026-11-29", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HC Košice - HK Nitra", "isHome": false}, {"id": 26, "competition": "25. kolo", "date": "2026-12-04", "startTime": "17:30:00", "endTime": "20:00:00", "match": "HK Nitra - HK Poprad", "isHome": true}, {"id": 27, "competition": "26. kolo", "date": "2026-12-06", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 28, "competition": "27. kolo", "date": "2026-12-15", "startTime": "17:30:00", "endTime": "20:00:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 29, "competition": "28. kolo", "date": "2026-12-18", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HC Slovan Bratislava - HK Nitra", "isHome": false}, {"id": 30, "competition": "29. kolo", "date": "2026-12-20", "startTime": "16:00:00", "endTime": "18:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 31, "competition": "30. kolo", "date": "2026-12-22", "startTime": "17:30:00", "endTime": "20:00:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 32, "competition": "31. kolo", "date": "2026-12-26", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 33, "competition": "32. kolo", "date": "2026-12-28", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 34, "competition": "33. kolo", "date": "2026-12-30", "startTime": "18:30:00", "endTime": "21:00:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 35, "competition": "34. kolo", "date": "2027-01-03", "startTime": "17:00:00", "endTime": "19:30:00", "match": "Vlci Žilina - HK Nitra", "isHome": false}, {"id": 36, "competition": "35. kolo", "date": "2027-01-05", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HC MONACObet Banská Bystrica", "isHome": true}, {"id": 37, "competition": "36. kolo", "date": "2027-01-08", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 38, "competition": "37. kolo", "date": "2027-01-10", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 39, "competition": "38. kolo", "date": "2027-01-15", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK 32 Liptovský Mikuláš - HK Nitra", "isHome": false}, {"id": 40, "competition": "39. kolo", "date": "2027-01-17", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK Dukla Michalovce", "isHome": true}, {"id": 41, "competition": "40. kolo", "date": "2027-01-22", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HKM Zvolen - HK Nitra", "isHome": false}, {"id": 42, "competition": "41. kolo", "date": "2027-01-24", "startTime": "15:30:00", "endTime": "18:00:00", "match": "HK Nitra - HK Dukla Trenčín", "isHome": true}, {"id": 43, "competition": "42. kolo", "date": "2027-01-29", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Spišská Nová Ves - HK Nitra", "isHome": false}, {"id": 44, "competition": "43. kolo", "date": "2027-01-30", "startTime": "19:00:00", "endTime": "21:30:00", "match": "HK Nitra - HC Prešov", "isHome": true}, {"id": 45, "competition": "44. kolo", "date": "2027-02-02", "startTime": "18:30:00", "endTime": "21:00:00", "match": "HK Nitra - HC Slovan Bratislava", "isHome": true}, {"id": 46, "competition": "45. kolo", "date": "2027-02-05", "startTime": "17:30:00", "endTime": "20:00:00", "match": "HK Nitra - HC Košice", "isHome": true}, {"id": 47, "competition": "46. kolo", "date": "2027-02-07", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HK Poprad - HK Nitra", "isHome": false}, {"id": 48, "competition": "47. kolo", "date": "2027-02-14", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - Vlci Žilina", "isHome": true}, {"id": 49, "competition": "48. kolo", "date": "2027-02-19", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HC MONACObet Banská Bystrica - HK Nitra", "isHome": false}, {"id": 50, "competition": "49. kolo", "date": "2027-02-21", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HK 32 Liptovský Mikuláš", "isHome": true}, {"id": 51, "competition": "50. kolo", "date": "2027-02-26", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Dukla Michalovce - HK Nitra", "isHome": false}, {"id": 52, "competition": "51. kolo", "date": "2027-02-28", "startTime": "17:00:00", "endTime": "19:30:00", "match": "HK Nitra - HKM Zvolen", "isHome": true}, {"id": 53, "competition": "52. kolo", "date": "2027-03-02", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Dukla Trenčín - HK Nitra", "isHome": false}, {"id": 54, "competition": "53. kolo", "date": "2027-03-05", "startTime": "18:00:00", "endTime": "20:30:00", "match": "HK Nitra - HK Spišská Nová Ves", "isHome": true}, {"id": 55, "competition": "54. kolo", "date": "2027-03-07", "startTime": "16:00:00", "endTime": "18:30:00", "match": "HC Prešov - HK Nitra", "isHome": false}];
 
         let currentView = 'table';
 
@@ -753,9 +737,8 @@
                 }
 
                 // Competition filter
-                if (compVal !== 'ALL' && m.competition !== compVal) {
-                    return false;
-                }
+                if (compVal === 'EXTRALIGA' && !m.competition.includes('kolo')) return false;
+                if (compVal === 'CHL' && !m.competition.includes('CHL')) return false;
 
                 // Venue filter
                 if (venueVal === 'HOME' && !m.isHome) return false;
@@ -794,7 +777,7 @@
                         <thead>
                             <tr>
                                 <th>Dátum & Čas</th>
-                                <th>Súťaž</th>
+                                <th>Popis / Súťaž</th>
                                 <th>Zápas</th>
                                 <th>Miesto</th>
                                 <th style="text-align: right;">Pridať do kalendára</th>
@@ -807,9 +790,7 @@
                     const dateFormatted = formatDateSk(m.date);
                     const timeFormatted = m.startTime.substring(0, 5) + ' - ' + m.endTime.substring(0, 5);
                     
-                    let compBadgeClass = 'badge-tipsport';
-                    if (m.competition.includes('CHL')) compBadgeClass = 'badge-chl';
-                    else if (m.competition.includes('Príprava')) compBadgeClass = 'badge-prep';
+                    let compBadgeClass = m.competition.includes('CHL') ? 'badge-chl' : 'badge-tipsport';
 
                     const venueBadge = m.isHome 
                         ? `<span class="badge badge-home">Domáci (D)</span>`
@@ -860,9 +841,7 @@
                     const dateFormatted = formatDateSk(m.date);
                     const timeFormatted = m.startTime.substring(0, 5) + ' - ' + m.endTime.substring(0, 5);
 
-                    let compBadgeClass = 'badge-tipsport';
-                    if (m.competition.includes('CHL')) compBadgeClass = 'badge-chl';
-                    else if (m.competition.includes('Príprava')) compBadgeClass = 'badge-prep';
+                    let compBadgeClass = m.competition.includes('CHL') ? 'badge-chl' : 'badge-tipsport';
 
                     const venueBadge = m.isHome 
                         ? `<span class="badge badge-home">Domáci</span>`
@@ -906,8 +885,8 @@
             const startDt = m.date.replace(/-/g, '') + 'T' + m.startTime.replace(/:/g, '');
             const endDt = m.date.replace(/-/g, '') + 'T' + m.endTime.replace(/:/g, '');
             const title = encodeURIComponent(`Hokej: ${m.match} (${m.competition})`);
-            const details = encodeURIComponent(`Hokejový zápas ${m.match}\nSúťaž: ${m.competition}\nOficiálny rozpis HK Nitra.`);
-            const location = encodeURIComponent(m.isHome ? 'Zimný štadión Nitra, Nitra, Slovensko' : 'Štadión súpera');
+            const details = encodeURIComponent(`Hokejový zápas: ${m.match}\nPopis / Súťaž: ${m.competition}\nOficiálny rozpis HK Nitra.`);
+            const location = encodeURIComponent(m.isHome ? 'Zimný štadión Nitra, Jesenského 2, 949 01 Nitra, Slovensko' : 'Štadión súpera');
 
             return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDt}/${endDt}&details=${details}&location=${location}`;
         }
@@ -920,22 +899,22 @@
                 'PRODID:-//HK Nitra//Rozpis Zapasov//SK',
                 'CALSCALE:GREGORIAN',
                 'METHOD:PUBLISH',
-                'X-WR-CALNAME:HK Nitra - Rozpis Zapasov',
+                'X-WR-CALNAME:HK Nitra - Rozpis Zapasov 2026-2027',
                 'X-WR-TIMEZONE:Europe/Bratislava'
             ];
 
             matches.forEach(m => {
                 const startDt = m.date.replace(/-/g, '') + 'T' + m.startTime.replace(/:/g, '');
                 const endDt = m.date.replace(/-/g, '') + 'T' + m.endTime.replace(/:/g, '');
-                const location = m.isHome ? 'Zimný štadión Nitra, Nitra, Slovensko' : 'Štadión súpera';
+                const location = m.isHome ? 'Zimný štadión Nitra, Jesenského 2, 949 01 Nitra, Slovensko' : 'Štadión súpera';
 
                 ics.push('BEGIN:VEVENT');
-                ics.push(`UID:match-${m.id}-2026@hknitra.sk`);
+                ics.push(`UID:match-${m.id}-2026-2027@hknitra.sk`);
                 ics.push(`DTSTAMP:${startDt}Z`);
                 ics.push(`DTSTART:${startDt}`);
                 ics.push(`DTEND:${endDt}`);
                 ics.push(`SUMMARY:Hokej: ${m.match} (${m.competition})`);
-                ics.push(`DESCRIPTION:Hokejový zápas ${m.match}\nSúťaž: ${m.competition}`);
+                ics.push(`DESCRIPTION:Hokejový zápas: ${m.match}\nPopis / Súťaž: ${m.competition}`);
                 ics.push(`LOCATION:${location}`);
                 ics.push('STATUS:CONFIRMED');
                 ics.push('END:VEVENT');
